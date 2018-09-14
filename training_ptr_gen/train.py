@@ -125,6 +125,7 @@ class Train(object):
 
             running_avg_loss = calc_running_avg_loss(loss, running_avg_loss, self.summary_writer, iter)
             iter += 1
+            print ("Iteration:",iter) #CM - debugging
 
             if iter % 100 == 0:
                 self.summary_writer.flush()
@@ -134,6 +135,9 @@ class Train(object):
                                                                            time.time() - start, loss))
                 start = time.time()
             if iter % 5000 == 0:
+                self.save_model(running_avg_loss, iter)
+            #CM - debugging - if reach the end before hitting 5000, write the model out
+            elif iter == n_iters:
                 self.save_model(running_avg_loss, iter)
 
 if __name__ == '__main__':
