@@ -20,6 +20,7 @@ use_cuda = config.use_gpu and torch.cuda.is_available()
 
 class Train(object):
     def __init__(self):
+	print("Training for",config.max_iterations) #CM
         self.vocab = Vocab(config.vocab_path, config.vocab_size)
         self.batcher = Batcher(config.train_data_path, self.vocab, mode='train',
                                batch_size=config.batch_size, single_pass=False)
@@ -125,7 +126,7 @@ class Train(object):
 
             running_avg_loss = calc_running_avg_loss(loss, running_avg_loss, self.summary_writer, iter)
             iter += 1
-            print ("Iteration:",iter) #CM - debugging
+            #print ("Iteration:",iter) #CM - debugging
 
             if iter % 100 == 0:
                 self.summary_writer.flush()
@@ -135,6 +136,8 @@ class Train(object):
                                                                            time.time() - start, loss))
                 start = time.time()
             if iter % 5000 == 0:
+                print ("Iteration:",iter) #CM - debugging
+
                 self.save_model(running_avg_loss, iter)
             #CM - debugging - if reach the end before hitting 5000, write the model out
             elif iter == n_iters:
